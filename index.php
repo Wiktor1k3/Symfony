@@ -1,3 +1,3 @@
 <?php
-	ech "hello world";
+	ech "hello world!";
 ?>
