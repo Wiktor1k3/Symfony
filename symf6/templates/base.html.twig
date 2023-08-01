@@ -1,0 +1,38 @@
+{# templates/base.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('/assets/css/base.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    {% block stylesheets %}{% endblock %}
+
+    {% block fos_user_head %}
+    {% endblock fos_user_head %}
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 70px;">
+    <a class="nav-link" href="#">Symfony</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+        <AmpContent>
+            <ul class="nav navbar-nav ml-auto"> {# Użyj klasy 'ml-auto' w trybie AMP #}
+                <li><a class="nav-link" href="#">View List</a></li>
+                <li><a class="nav-link" href="{{ path('lista_zamowien') }}">Zamowienia</a></li>
+
+                <li><a class="nav-link special" href="#" >Logout</a></li>
+            </ul>
+        </AmpContent>
+</nav>
+
+<div>
+    {% block fos_user_content %}
+    {% endblock fos_user_content %}
+</div>
+
+{% block body %}{% endblock %}
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>
