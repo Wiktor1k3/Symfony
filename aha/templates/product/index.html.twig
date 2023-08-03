@@ -1,0 +1,54 @@
+{# templates/list/index.html.twig #} {% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/list.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-light mb-3 mt-3">
+                    <div class="card-body">
+                        <div class="card-header">Lista zamówień</div>
+                        <table class="table">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Department</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                            {% for element in element %}
+                                <tr>
+                                    <td>{{ element.id }}</td>
+                                    <td>{{ element.name}}</td>
+                                    <td>{{ element.price}}</td>
+                                    <td>{{ element.department }}</td>
+                                    <td>{{ element.description}}</td>
+
+                                    <td>
+                                        <a href="{{ path('product_update', {'id': element.id}) }}">Edytuj</a>
+                                        <a href="{{ path('product_delete', {'id': element.id}) }}"
+                                           onclick="return confirm('Czy na pewno chcesz usunąć to zamówienie?')">Usuń</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+
+                        <div class="form-group">
+                            <a href="{{ path('product_create') }}" class="btn btn-info">Dodaj</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/jss/edit_list.js') }}"></script>
+
+{% endblock %}
+

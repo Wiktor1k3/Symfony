@@ -1,0 +1,40 @@
+{# templates/base.html.twig #}
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('/assets/css/base.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% block stylesheets %}{% endblock %}
+
+</head>
+
+<body>
+<header>
+<nav class="navbar navbar-light bg-light navbar-expand-lg">
+    <a class="nav-link" href="#">Symfony</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="mainmenu">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#">View List</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('lista_zamowien') }}">Zamowienia</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_customer') }}">Customer</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('list_converter') }}">Converter</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('lista_zamowien') }}">Zamowienia</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('lista_zamowien') }}">Zamowienia</a></li>
+                <li class="nav-item"><a class="nav-link special2" href="{{ path('app_login') }}">Login</a></li>
+                <li class="nav-item"><a class="nav-link special1" href="{{ path('app_logout') }}" >Logout</a></li>
+            </ul>
+    </div>
+</nav>
+</header>
+
+
+{% block body %}{% endblock %}
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>
