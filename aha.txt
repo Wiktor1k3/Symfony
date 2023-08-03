@@ -34,3 +34,39 @@ html.twig:
               </div>
             </div>
           </form>
+
+
+
+Custorepo:
+    public function findByUser($user): ?Customer
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+custocon:
+   #[Route('/customer/create', name: 'customer_create')]
+    public function create(Request $request): Response
+    {
+        $element = new Customer();
+
+        $user = $this->getUser();
+
+        $check = $this->customerRepository->findByUser($user);
+
+        if(!($check==null)){
+            return $this->redirectToRoute('app_customer');
+        }
+
+        $element->setUser($user);
+
+        $repository = $this->entityManager->getRepository(Customer::class);
+        do {
+            $uniqueIdCards = mt_rand(1, 1000);
+            $existingCustomer = $repository->findOneBy(['IdCards' => $uniqueIdCards]);
+        } while ($existingCustomer);
+
+        $element->setIdCards($uniqueIdCards);
