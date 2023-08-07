@@ -1,0 +1,65 @@
+{# templates/list/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/list.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-light mb-3 mt-3">
+                    <div class="card-body">
+                        <div class="card-header">Lista zamówień</div>
+                        
+                        {# Wyszukiwarka #}
+                        <div class="form-group">
+                            <label for="searchInput">Szukaj:</label>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Wprowadź frazę do wyszukania">
+                        </div>
+                        
+                        <table class="table">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Lastname</th>
+                            </tr>
+                            {% for element in elements %}
+                                <tr>
+                                    <td>{{ element.status}}</td>
+                                    <td>{{ element.createdAt | date('Y-m-d')}}</td>
+                                    <td>{{ element.updatedAt | date('Y-m-d')}}</td>
+                                    <td>
+                                        <a href="{{ path('customer_update', {'id': element.id}) }}">Edytuj</a>
+                                        <a href="{{ path('customer_delete', {'id': element.id}) }}"
+                                           onclick="return confirm('Czy na pewno chcesz usunąć to zamówienie?')">Usuń</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+
+                        <div class="form-group">
+                            <a href="{{ path('customer_create') }}" class="btn btn-info">Dodaj</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/jss/edit_list.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Obsługa wyszukiwania
+            $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("table tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+{% endblock %}
