@@ -1,0 +1,21 @@
+
+<h1>Informacje o Zamówieniu</h1>
+
+<table>
+    <tr>
+        <td>ID:</td>
+        <td>{{ zamowienie.id }}</td>
+    </tr>
+    <tr>
+        <td>Data:</td>
+        <td>{{ zamowienie.data|date('Y-m-d H:i:s') }}</td>
+    </tr>
+    <tr>
+        <td>Wartość:</td>
+        <td>{{ zamowienie.wartosc }}</td>
+    </tr>
+    {# Dodaj pozostałe pola zgodnie z Twoją encją Zamowienie #}
+</table>
+
+<a href="{{ path('zamowienie_index') }}">Powrót do listy zamówień</a>
+

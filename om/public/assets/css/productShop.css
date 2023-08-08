@@ -1,0 +1,27 @@
+
+.west
+{
+    float: left;
+    width: 1000px;
+    padding: 20px;
+    text-align: justify;
+}
+
+.east
+{
+    margin-top: 0;
+    float: left;
+    width: 200px;
+    padding: 20px;
+    text-align: center;
+    background-color: #3b82f6;
+    height: 1000px;
+}
+
+.east.active
+{
+    margin-top: 80px;
+}
+
+
+

@@ -1,0 +1,52 @@
+{# templates/list/index.html.twig #} {% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/list.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-light mb-3 mt-3">
+                    <div class="card-body">
+                        <div class="card-header">Lista zamówień</div>
+                            <table class="table">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Data</th>
+                                    <th>Wartość</th>
+                                    <th>Ilość Produktów</th>
+                                    <th>Produkt</th>
+                                </tr>
+                                {% for zamowienie in zamowienia %}
+                                <tr>
+                                    <td>{{ zamowienie.id }}</td>
+                                    <td>{{ zamowienie.data|date('Y-m-d') }}</td>
+                                    <td>{{ zamowienie.wartosc }}</td>
+                                    <td>{{ zamowienie.ileProduktow }}</td>
+                                    <td>{{ zamowienie.produkt }}</td>
+
+                                    <td>
+                                        <a href="{{ path('zamowienie_update', {'id': zamowienie.id}) }}">Edytuj</a>
+                                        <a href="{{ path('zamowienie_delete', {'id': zamowienie.id}) }}"
+                                           onclick="return confirm('Czy na pewno chcesz usunąć to zamówienie?')">Usuń</a>
+                                    </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </table>
+
+                            <div class="form-group">
+                                <a href="{{ path('zamowienie_create') }}" class="btn btn-info">Dodaj</a>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/jss/edit_list.js') }}"></script>
+
+{% endblock %}

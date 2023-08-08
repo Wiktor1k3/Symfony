@@ -1,0 +1,16 @@
+{# templates/order_form.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Order Form</title>
+</head>
+<body>
+<h1>Order Form</h1>
+{{ form_start(form) }}
+{{ form_row(form.status) }}
+{{ form_row(form.createdAt) }}
+{{ form_row(form.updatedAt) }}
+{{ form_end(form) }}
+</body>
+</html>

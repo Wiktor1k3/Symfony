@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('/assets/css/productShop.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="west">
+            <h1 class="mt-3 mb-4">Products</h1>
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="https://via.placeholder.com/200x150" alt="{{ product.name }}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                <div class="d-flex justify-content-between align-item-center">
+                                    <a href="{{ path('product_detail',{'id':product.id}) }}" class="btn btn-dark">View details</a>
+                                    <span class="h5 mt-auto">{{ product.price }} €</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="east">
+
+            <aside>
+
+                <nav>
+
+                   {#  <h2>Department</h2>
+
+                    {% for department in department %}
+                        <ul>
+                            <li>
+                                <a href="{{ path('department_search', {'department': department.id}) }}">{{ department.department }}</a>
+                            </li>
+                        </ul>
+                    {% endfor %} #}
+                    <div class="list-group" style="margin-top: 150px">
+                        <a href="{{ path('home') }}" class="list-group-item list-group-item-action active">
+                            Department
+                        </a>
+
+                        {% for department in department %}
+                            <a class="list-group-item list-group-item-action"  href="{{ path('department_search', {'department': department.id}) }}">{{ department.department }}</a>
+                        {% endfor %}
+                    </div>
+
+                    {#
+                    <h2>Powiązane wpisy</h2>
+
+                    <ul>
+                        <li>Anthony de Mello: Poszukiwanie akceptacji</li>
+                        <li>Fryderyk Nietzsche: Zgładzić smoka</li>
+                        <li>Alan Watts: Potrzeba kontroli</li>
+                    </ul>
+
+                    <h2>Archiwum bloga</h2>
+
+                    <ul>
+                        <li>Styczeń (8)</li>
+                        <li>Luty (6)</li>
+                        <li>Marzec (7)</li>
+                        <li>Kwiecień (9)</li>
+                        <li>Maj (9)</li>
+                        <li>Czerwiec (10)</li>
+                        <li>Lipiec (11)</li>
+                        <li>Sierpień (9)</li>
+                        <li>Wrzesień (8)</li>
+                        <li>Październik (9)</li>
+                        <li>Listopad (6)</li>
+                        <li>Grudzień (10)</li>
+                    </ul> #}
+
+                </nav>
+
+
+
+            </aside>
+
+        </div>
+
+        <div style="clear:both;"></div>
+
+
+    </div>
+
+{% endblock %}

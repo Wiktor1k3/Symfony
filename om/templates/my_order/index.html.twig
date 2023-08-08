@@ -1,0 +1,42 @@
+{# templates/list/index.html.twig #} {% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-light mb-3 mt-3">
+                    <div class="card-body">
+                        <div class="card-header">Lista zamówień</div>
+                        <table class="table">
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                            {% for orders in orders %}
+                                <tr>
+                                    <td>{{ orders.id }}</td>
+                                    <td>{{ orders.updatedAt | date('Y-m-d')}}</td>
+                                    <td>{{ orders.total }}</td>
+
+                                    <td>
+                                        <a href="{{ path('order_detail', {'id': orders.id}) }}">Detail</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/jss/edit_list.js') }}"></script>
+
+{% endblock %}

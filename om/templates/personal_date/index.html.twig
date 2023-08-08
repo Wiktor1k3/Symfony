@@ -1,0 +1,77 @@
+{# templates/list/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-light mb-3 mt-3">
+                    <div class="card-body">
+                        <div class="card-header">Lista zamówień </div>
+
+                        <table class="table">
+
+                            {% if customer is defined %}
+                            <tr>
+                                <th>Card ID:</th>
+                                <td>{{ customer.IdCards }}</td>
+                            </tr>
+                            <tr>
+                                <th>Points:</th>
+                                <td>{{ customer.points }}</td>
+                            </tr>
+                            {% endif %}
+
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ user.email }}</td>
+                            </tr>
+
+
+                            {% if element is defined %}
+                            <tr>
+                                <th>Name:</th>
+                                <td>{{ element.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Lastname:</th>
+                                <td>{{ element.lastname }}</td>
+                            </tr>
+                            <tr>
+                                <th>PostalCode:</th>
+                                <td>{{ element.PostalCode }}</td>
+                            </tr>
+                            <tr>
+                                <th>City:</th>
+                                <td>{{ element.city }}</td>
+                            </tr>
+                            <tr>
+                                <th>StreetAndNumberHouse:</th>
+                                <td>{{ element.StreetAndNumberHouse }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country:</th>
+                                <td>{{ element.Country }}</td>
+                            </tr>
+                            <tr>
+                                <th>MobileNumber:</th>
+                                <td>{{ element.MobileNumber }}</td>
+                            </tr>
+                            {% endif %}
+                        </table>
+                        {% if element is not defined %}
+                            <a href="{{ path('personal_create') }}">Uzupełnij dane</a>
+                        {% endif %}
+                        {% if element is defined %}
+                            <a href="{{ path('personal_update') }}">Edytuj dane</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/jss/edit_list.js') }}"></script>
+{% endblock %}

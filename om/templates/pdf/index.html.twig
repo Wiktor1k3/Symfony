@@ -1,0 +1,18 @@
+{# templates/pdf_template.html.twig #}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Order PDF</title>
+</head>
+<body>
+<h1>Order Details:</h1>
+<p>Status: {{ order.status }}</p>
+<p>Created At: {{ order.createdAt|date('Y-m-d H:i:s') }}</p>
+<p>Updated At: {{ order.updatedAt|date('Y-m-d H:i:s') }}</p>
+
+{# Dodaj link do pobrania PDF-a #}
+<a href="{{ path('app_pdf') }}">Pobierz PDF</a>
+</body>
+</html>
+

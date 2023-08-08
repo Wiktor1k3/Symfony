@@ -1,0 +1,44 @@
+{# templates/list/index.html.twig #} {% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-light mb-3 mt-3">
+                    <div class="card-body">
+                        <div class="card-header">Lista zamówień</div>
+                        <table class="table">
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price per item </th>
+                                <th>Action</th>
+                            </tr>
+                            {% for items in item %}
+                                <tr>
+                                    <td>{{ items.product.name}}</td>
+                                    <td>{{ items.quantity}}</td>
+                                    <td>{{ items.product.price }}</td>
+
+                                    <td>
+                                        <a href="{{ path('product_detail', {'id': items.product.id}) }}">View in shop</a>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/jss/edit_list.js') }}"></script>
+
+{% endblock %}
