@@ -1,0 +1,175 @@
+{# templates/login/index.html.twig #}
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+<style>
+    .popup-container {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);}
+
+    input[type=email],
+    input[type=text],
+    input[type=password]
+    {
+        width: 300px;
+        background-color: #efefef;
+        color: #666;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        font-size: 20px;
+        padding: 10px;
+        box-sizing: border-box;
+        outline: none;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    input[type=email]:focus,
+    input[type=text]:focus,
+    input[type=password]:focus
+    {
+        -webkit-box-shadow: 0 0 10px 2px rgba(204, 204, 204, 0.9);
+        -moz-box-shadow: 0 0 10px 2px rgba(204, 204, 204, 0.9);
+        box-shadow: 0 0 10px 2px rgba(204, 204, 204, 0.9);
+        border: 2px solid #a5cda5;
+        background-color: #e9f3e9;
+        color: #a5cda5;
+    }
+
+    button[type=submit]
+    {
+        width: 300px;
+        background-color: #36b03c;
+        font-size: 20px;
+        color: white;
+        padding: 15px 10px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        letter-spacing: 2px;
+        outline: none;
+    }
+    .popup-error {
+        display: none;
+        color: red;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    button[type=submit]:focus
+    {
+        -webkit-box-shadow: 0 0 10px 2px rgba(204, 204, 204, 0.9);
+        -moz-box-shadow: 0 0 10px 2px rgba(204, 204, 204, 0.9);
+        box-shadow: 0 0 10px 2px rgba(204, 204, 204, 0.9);
+    }
+</style>
+{% endblock %}
+
+
+{% block body %}
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form action="{{ path('app_login') }}" method="post">
+        <label for="username">Email:</label>
+        <input type="text" id="username" name="_username" value="{{ last_username }}">
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="_password">
+
+        {# If you want to control the URL the user is redirected to on success
+        <input type="hidden" name="_target_path" value="/account"> #}
+
+        <button type="submit">login</button>
+    </form>
+    <button id="openPopupButton">Change Password</button>
+    <div class="popup-container" id="passwordPopup">
+        <div class="popup-error" id="passwordError">Incorrect password</div>
+        <form id="passwordForm">
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" id="currentPassword" required>
+            <button type="submit">Verify Password</button>
+        </form>
+
+        <!-- Formularz zmiany hasła -->
+        <form id="changePasswordForm" style="display: none;">
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" required>
+            <label for="confirmPassword">Confirm New Password:</label>
+            <input type="password" id="confirmPassword" required>
+            <button type="submit">Change Password</button>
+        </form>
+    </div>
+    <script>
+        // Kod JavaScript do obsługi popupa
+        const openPopupButton = document.getElementById('openPopupButton');
+        const passwordPopup = document.getElementById('passwordPopup');
+        const passwordForm = document.getElementById('passwordForm');
+        const changePasswordForm = document.getElementById('changePasswordForm');
+        const currentPasswordInput = document.getElementById('currentPassword');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordError = document.getElementById('passwordError');
+
+        openPopupButton.addEventListener('click', () => {
+            passwordPopup.style.display = 'block';
+            passwordError.style.display = 'none';
+            changePasswordForm.style.display = 'none';
+        });
+
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const currentPassword = currentPasswordInput.value;
+            const response = await fetch('/changepass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ currentPassword }),
+            });
+
+            if (response.ok) {
+                passwordForm.style.display = 'none';
+                changePasswordForm.style.display = 'block';
+            } else {
+                passwordError.style.display = 'block';
+            }
+        });
+
+        changePasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const newPassword = newPasswordInput.value;
+            const confirmedPassword = confirmPasswordInput.value;
+
+            if (newPassword !== confirmedPassword) {
+                return;
+            }
+
+            const changePasswordResponse = await fetch('/changepassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ newPassword }),
+            });
+
+            if (changePasswordResponse.ok) {
+                alert('Password changed successfully');
+                window.location.href='/';
+            } else {
+                alert('An error occurred while changing the password');
+            }
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
