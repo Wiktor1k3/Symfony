@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('/assets/css/productSh0op.css') }}">
+    <style>
+        #scrollToTopButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            width: 40px;
+            height: 40px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #scrollToTopButton::before {
+            content: '\25B2'; /* Unicode dla strzałki w górę */
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #scrollToTopButton:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="west col-lg-10">
+
+            <div class="d-flex">
+
+                <div class="p-2">
+                    <h1 class="mt-3 mb-4">Products</h1>
+                </div>
+
+                <div class="btn-group p-2 align-self-center ms-auto d-md-none" style="height: 60px">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search">
+                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end " style="text-align: center">
+                        {% for department in department %}
+                           <li><a class="list-group-item list-group-item-action"  href="{{ path('department_search', {'department': department.id}) }}">{{ department.department }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="https://via.placeholder.com/200x150" alt="{{ product.name }}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                <div class="d-flex justify-content-between align-item-center">
+                                    <a href="{{ path('product_detail',{'id':product.id}) }}" class="btn btn-dark">View details</a>
+                                    <span class="h5 mt-auto">{{ product.price }} €</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="east col-lg-2 d-none d-md-block">
+
+            <aside>
+
+                <nav>
+
+                    <div class="list-group" style="margin-top: 150px">
+                        <a href="{{ path('home') }}" class="list-group-item list-group-item-action active">
+                            Department
+                        </a>
+
+                        {% for department in department %}
+                            <a class="list-group-item list-group-item-action"  href="{{ path('department_search', {'department': department.id}) }}">{{ department.department }}</a>
+                        {% endfor %}
+                    </div>
+                </nav>
+
+
+
+            </aside>
+
+        </div>
+
+        <div style="clear:both;"></div>
+
+
+    </div>
+    <button class="ms-auto" id="scrollToTopButton"></button>
+
+    <script>
+        const scrollToTopButton = document.getElementById("scrollToTopButton");
+
+        // Pokazuj przycisk, gdy użytkownik przewinie stronę w dół
+        window.onscroll = () => {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopButton.style.display = "block";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
+        };
+
+        // Przewijaj stronę na górę po kliknięciu
+        scrollToTopButton.addEventListener("click", () => {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        });
+    </script>
+
+{% endblock %}
