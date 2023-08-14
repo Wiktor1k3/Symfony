@@ -1,0 +1,10 @@
+$startingRow = 3; // Numer wiersza, od którego chcesz zacząć
+$numberOfRows = 10; // Przykładowa liczba wierszy do odczytania
+$entityManager = $this->getDoctrine()->getManager();
+$entityRepository = $entityManager->getRepository(YourEntity::class);
+
+$queryBuilder = $entityRepository->createQueryBuilder('e')
+    ->setFirstResult($startingRow - 1) // -1, ponieważ indeksy w bazie danych zaczynają się od 0
+    ->setMaxResults($numberOfRows);
+
+$results = $queryBuilder->getQuery()->getResult();
