@@ -28,7 +28,8 @@ rep:
     public function findByDateRange($startDate, $endDate)
     {
         return $this->createQueryBuilder('o')
-            ->andWhere('o.createdAt = :start_date')
+            ->andWhere('o.createdAt >= :start_date')
+            ->andWhere('o.createdAt <= :end_date')
             ->setParameter('start_date', $startDate)
             ->orderBy('o.createdAt', 'DESC') // Przykład sortowania po dacie utworzenia
             ->getQuery()
