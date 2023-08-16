@@ -1,1 +1,37 @@
-a
+contr:
+    #[Route('/search', name: 'app_search')]
+    public function search(Request $request): Response
+    {
+        $startDate = $request->query->get('start_date');
+        $endDate = $request->query->get('end_date');
+
+        $elements = $this->orderRepository->findByDateRange($startDate, $endDate);
+
+        return $this->render('order/index.html.twig', [
+            'elements' => $elements,
+        ]);
+    }
+
+
+twig:
+<div class="form-group">
+                            <form action="{{ path('app_search') }}" method="get">
+                                <label for="startDateInput">Data:</label>
+                                <input type="date" id="startDateInput" name="start_date" class="form-control">
+
+
+                                <button type="submit" class="btn btn-primary">Szukaj</button>
+                            </form>
+                        </div>
+
+rep:
+    public function findByDateRange($startDate, $endDate)
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.createdAt = :start_date')
+            ->setParameter('start_date', $startDate)
+            ->orderBy('o.createdAt', 'DESC') // Przykład sortowania po dacie utworzenia
+            ->getQuery()
+            ->getResult();
+    }
+
