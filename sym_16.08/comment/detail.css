@@ -1,0 +1,42 @@
+.comments{
+    width: 30%;
+    border-radius: 15px;
+    margin: 10px;
+
+}
+
+.comments_add{
+    width: 30%;
+    border-radius: 15px;
+    margin: 10px;
+
+}
+
+.comment-meta_add{
+    background: #0c7cd2;
+    border: 2px solid gray;
+    padding: 10px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
+}
+
+.comment{
+    margin: 5px;
+}
+
+.comment-meta{
+    background: #5a6268;
+    border: 2px solid gray;
+    padding: 10px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
+}
+
+.comment-content{
+    padding: 10px;
+    border: 2px solid gray;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
