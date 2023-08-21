@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slider Symfony</title>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <style>
+        #slider-container {
+            width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide {
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: auto;
+        }
+
+        .slick-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            z-index: 1;
+        }
+
+        .slick-dots li {
+            flex: 0 0 auto;
+            margin: 0 5px;
+        }
+
+        .slick-dots button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 10px;
+            height: 10px;
+            padding: 0;
+        }
+
+        .slick-dots .slick-active button {
+            background: #333;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<div id="slider-container">
+    <div id="slider" class="slick">
+        <div class="slide"> <img src="{{ asset('/assets/image/zdj1.jpg') }}" alt="Slide"></div>
+        <div class="slide"><img src="{{ asset('/assets/image/zdj2.jpg') }}" alt="Slide"></div>
+        <div class="slide"><img src="{{ asset('/assets/image/zdj3.jpg') }}" alt="Slide"></div>
+    </div>
+    <ul class="slick-dots"></ul>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.slick').slick({
+            autoplay: true,
+            autoplaySpeed: 3000,
+            dots: true,
+            appendDots: $('.slick-dots'),
+        });
+    });
+</script>
+</body>
+</html>
