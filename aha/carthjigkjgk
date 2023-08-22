@@ -1,0 +1,146 @@
+Rozumiem, że chcesz, aby po zmianie wartości quantity w koszyku automatycznie aktualizowała się cena końcowa (cart.total).
+
+Poniżej przedstawiam poprawiony kod do Twojego szablonu cart/index.html.twig oraz kontrolera CartController.php. Upewnij się, że uwzględniasz odpowiednie zależności i konfiguracje w Twoim projekcie.
+
+Szablon cart/index.html.twig:
+
+twig
+Copy code
+{% extends 'base.html.twig' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Your Cart</h1>
+        {% if cart.items.count > 0 %}
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    {{ form_start(form) }}
+                    <div class="card">
+                        <div class="card-header bg-dark text-white d-flex">
+                            <h5>Items</h5>
+                            <div class="ml-auto">
+                                {{ form_widget(form.save, {'attr': {'class': 'btn btn-warning'}}) }}
+                                {{ form_widget(form.clear, {'attr': {'class': 'btn btn-light'}}) }}
+                            </div>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% for item in form.items %}
+                                <li class="list-group-item d-flex">
+                                    <div class="flex-fill mr-2">
+                                        <img src="https://via.placeholder.com/200x150" width="64" alt="Product image">
+                                    </div>
+                                    <div class="flex-fill mr-2">
+                                        <h5 class="mt-0 mb-0">{{ item.vars.data.product.name }}</h5>
+                                        <small>{{ item.vars.data.product.description[:50] }}...</small>
+                                        <div class="form-inline mt-2">
+                                            <div class="form-group mb-0 mr-2">
+                                                {{ form_widget(item.quantity, {
+                                                    'attr': {
+                                                        'class': 'form-control form-control-sm ' ~ (item.quantity.vars.valid ? '' : 'is-invalid'),
+                                                        'data-product-id': item.vars.data.product.id  // Dodaj atrybut data-product-id
+                                                    }
+                                                }) }}
+                                            </div>
+                                            {{ form_widget(item.remove, {'attr': {'class': 'btn btn-dark btn-sm'}}) }}
+                                        </div>
+                                    </div>
+                                    <div class="flex-fill mr-2 text-right">
+                                        <b>{{ item.vars.data.product.price }} €</b>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="col-md-8"></div>
+                <div class="col-md-4">
+                    <div class="card mt-4 mt-md-0">
+                        <h5 class="card-header bg-dark text-white">Summary</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div><b>Total</b></div>
+                                <span><b id="aha">{{ cart.total }} €</b></span>
+                            </li>
+                        </ul>
+                        <div class="card-body">
+                            <a href="{{ path('place_order')}}" class="btn btn-warning w-100">Checkout</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                Your cart is empty. Go to the <a href="{{ path('home') }}">product list</a>.
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('.form-control').change(function() {
+                var selectedOption = $(this).val();
+                var productId = $(this).data('product-id');  // Pobierz id produktu z atrybutu data-product-id
+
+                $.ajax({
+                    url: '{{ path('update_delivery_option') }}',
+                    type: 'POST',
+                    data: { selectedOption: selectedOption, productId: productId },
+                    dataType: 'json',
+                    success: function(response) {
+                        // Aktualizacja widoku na podstawie odpowiedzi serwera
+                        $('#aha').text(response.total + ' €');  // Aktualizuj cenę końcową
+                        // ... Inne aktualizacje, jeśli są potrzebne ...
+                    },
+                    error: function(error) {
+                        console.error('Błąd podczas aktualizacji opcji dostawy: ', error);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+Kontroler CartController.php:
+
+php
+Copy code
+// ...
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
+
+class CartController extends AbstractController
+{
+    // ...
+
+    /**
+     * @Route("/update_delivery_option", name="update_delivery_option", methods={"POST"})
+     */
+    public function updateDeliveryOption(Request $request, CartManager $cartManager, OrderItemRepository $orderItemRepository): JsonResponse
+    {
+        $selectedOption = $request->request->get('selectedOption');
+        $productId = $request->request->get('productId');
+
+        // Pobierz aktualny koszyk
+        $cart = $cartManager->getCurrentCart();
+
+        // Pobierz odpowiedni przedmiot z repozytorium
+        $orderItem = $orderItemRepository->findOneBy(['product' => $productId, 'orderRef' => $cart]);
+
+        if ($orderItem) {
+            $orderItem->setQuantity($selectedOption);
+            $this->getDoctrine()->getManager()->flush();
+
+            // Oblicz zaktualizowaną łączną wartość (np. ceny)
+            $updatedTotal = $cart->getTotal();
+
+            return new JsonResponse(['total' => $updatedTotal]);
+        } else {
+            // W przypadku nieznalezienia przedmiotu lub innych błędów
+            return new JsonResponse(['error' => 'Item not found'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // ...
+}
