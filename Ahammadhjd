@@ -1,0 +1,93 @@
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ */
+class Article
+{
+    // ...
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $voteCount = 0;
+
+    // ...
+
+    public function getVoteCount(): int
+    {
+        return $this->voteCount;
+    }
+
+    public function incrementVoteCount(): void
+    {
+        $this->voteCount++;
+    }
+}
+
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Article;
+
+class VoteController extends AbstractController
+{
+    /**
+     * @Route("/vote/{id}", name="vote", methods={"POST"})
+     */
+    public function vote(Article $article, Request $request): JsonResponse
+    {
+        // Check if user is authenticated
+        if (!$this->isGranted('ROLE_USER')) {
+            return new JsonResponse(['message' => 'Unauthorized'], 403);
+        }
+
+        // Check if the user has already voted for this article
+        if ($article->hasVotedByUser($this->getUser())) {
+            return new JsonResponse(['message' => 'Already voted'], 400);
+        }
+
+        // Update the vote count and persist changes
+        $article->incrementVoteCount();
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
+        return new JsonResponse(['message' => 'Vote added']);
+    }
+}
+
+
+{# ... #}
+<div>
+    <h2>{{ article.title }}</h2>
+    <p>{{ article.content }}</p>
+    <p>Vote count: {{ article.voteCount }}</p>
+    <button id="voteButton" data-article-id="{{ article.id }}">Vote Up</button>
+</div>
+
+<script>
+    document.getElementById('voteButton').addEventListener('click', function() {
+        const articleId = this.getAttribute('data-article-id');
+        
+        fetch(`/vote/${articleId}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Vote added') {
+                    // Update UI to show the new vote count
+                    const voteCountElement = document.querySelector('.vote-count');
+                    voteCountElement.textContent = parseInt(voteCountElement.textContent) + 1;
+                    
+                    // Disable the vote button
+                    document.getElementById('voteButton').disabled = true;
+                }
+            });
+    });
+</script>
+
+
